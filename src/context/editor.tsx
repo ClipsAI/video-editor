@@ -1,9 +1,6 @@
 // React
 import { ReactNode, Suspense } from 'react'
 
-// Components
-// import { Loading } from '@/components/Loading'
-
 // Contexts
 import { ResizerProvider } from '@/context/resizer'
 import { TranscriptProvider } from '@/context/transcript'

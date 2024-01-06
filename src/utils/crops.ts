@@ -46,22 +46,13 @@ export function getSegmentStartTime(index: number, segments: Segment[]): number 
  * @param resizedSegments - The object containing resized segments data.
  * @returns An array of segments within the time range.
  */
-export function getSegmentsInRange(startTime: number, end_time: number, segments: Segment[]): SegmentExtended[] {
-
-    const segmentsExtended: SegmentExtended[] = segments.map((segment, index) => {
-        const segmentStartTime = getSegmentStartTime(index, segments);
-        return { ...segment, start_time: segmentStartTime };
-    });
-
-    return segmentsExtended.filter((segment) => {
-
-
+export function getSegmentsInRange(startTime: number, end_time: number, segments: Segment[]): Segment[] {
+    return segments.filter((segment) => {
         const clipStartTimeWithinSegment = startTime >= segment.start_time && startTime < segment.end_time;
         const segmentWithinClipRange = segment.start_time >= startTime && segment.end_time <= end_time;
         const clipend_timeWithinSegment = end_time >= segment.start_time && end_time <= segment.end_time;
 
         return clipStartTimeWithinSegment || segmentWithinClipRange || clipend_timeWithinSegment;
-
     });
 }
 

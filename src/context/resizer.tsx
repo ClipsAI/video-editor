@@ -17,7 +17,7 @@ type ResizerContextType = {
     setResizeMode: Dispatch<SetStateAction<ResizeMode>>,
     segments: Segment[],
     setSegments: Updater<Segment[]>,
-    currSegment: MutableRefObject<Segment>,
+    currentSegment: MutableRefObject<Segment>,
 }
 
 export const ResizerContext = createContext<ResizerContextType>({
@@ -29,12 +29,12 @@ export const ResizerContext = createContext<ResizerContextType>({
     setResizeMode: () => { },
     segments: [],
     setSegments: () => { },
-    currSegment: { current: crops_data.segments[0] },
+    currentSegment: { current: crops_data.segments[0] },
 });
 
 export function ResizerProvider({ children }: { children: ReactNode }) {
     const [crops, setCrops] = useImmer<Crops>(crops_data);
-    const currSegment = useRef<Segment>(crops_data.segments[0]);
+    const currentSegment = useRef<Segment>(crops_data.segments[0]);
     const [segments, setSegments] = useImmer<Segment[]>(crops_data.segments);
 
     const [resizeLeft, setResizeLeft] = useState<number>(0);
@@ -44,7 +44,7 @@ export function ResizerProvider({ children }: { children: ReactNode }) {
         crops, setCrops,
         resizeMode, setResizeMode,
         resizeLeft, setResizeLeft,
-        currSegment, segments, setSegments,
+        currentSegment, segments, setSegments,
     };
 
     return (

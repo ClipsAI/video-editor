@@ -11,7 +11,7 @@ import { getSegmentIndex, findSegmentByTime } from '@/utils/crops'
 export function useResizer() {
     const { 
         crops, setCrops,
-        currSegment,  segments, setSegments,
+        currentSegment,  segments, setSegments,
         resizeLeft, setResizeLeft,
         resizeMode, setResizeMode, 
     } = useContext(ResizerContext);
@@ -88,7 +88,7 @@ export function useResizer() {
         setDrag(false);
         
         setSegments((draft: Segment[]) => {
-            const segmentIndex = getSegmentIndex(currSegment.current.end_time, draft);
+            const segmentIndex = getSegmentIndex(currentSegment.current.end_time, draft);
             const newResizeX = (resizeLeft / 100) * crops.original_width;
             draft[segmentIndex].x = Math.round(newResizeX);
         });
@@ -100,17 +100,17 @@ export function useResizer() {
         if (segments.length === 0) return;
 
         const { segment } = findSegmentByTime(time, segments);
-        if (currSegment.current && currSegment.current.x !== segment.x) {
+        if (currentSegment.current && currentSegment.current.x !== segment.x) {
             const relativePosition = (segment.x / crops.original_width) * 100;
             setResizeLeft(relativePosition);
         }
-        currSegment.current = segment;
+        currentSegment.current = segment;
     }
 
     return {
         resizeFrame,
         resizeWidth,
-        currSegment,
+        currentSegment,
         resizeContainer,
         handleDown,
         handleMove,
