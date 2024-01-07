@@ -24,8 +24,6 @@ type VideoContextType = {
     setPaused: SetState<boolean>,
     currentTime: number,
     setTime: Dispatch<SetStateAction<number>>,
-    timeBucket: TimeBucket,
-    setTimeBucket: Updater<TimeBucket>,
 }
 
 export const VideoContext = createContext<VideoContextType>({
@@ -42,8 +40,6 @@ export const VideoContext = createContext<VideoContextType>({
     setPaused: () => { },
     currentTime: 0,
     setTime: () => { },
-    timeBucket: { min: 0, max: 60 },
-    setTimeBucket: () => { },
 });
 
 export function VideoProvider({ children }: { children: ReactNode }) {
@@ -56,8 +52,6 @@ export function VideoProvider({ children }: { children: ReactNode }) {
     const [video, setVideo] = useImmer<Video>(video_data);
     const [clip, setClip] = useImmer<Clip>(video_data.clips[0]);
     const [clips, setClips] = useImmer<Clip[]>(video_data.clips);
-    
-    const [timeBucket, setTimeBucket] = useImmer<TimeBucket>({ min: 0, max: 60 });
 
     const clipInfo = {
         videoPlayer,
@@ -67,7 +61,6 @@ export function VideoProvider({ children }: { children: ReactNode }) {
         muted, setMuted,
         paused, setPaused,
         currentTime, setTime,
-        timeBucket, setTimeBucket,
     };
 
     return (
