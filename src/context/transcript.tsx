@@ -12,7 +12,7 @@ type TranscriptContextType = {
     transcript: Transcript,
     setTranscript: Updater<Transcript>,
     currentWordIndex: number,
-    setCurrentWordIndex: Dispatch<SetStateAction<number>>,
+    setCurrentWordIndex: SetState<number>,
     startTranscript: ClipTranscript,
     setStartTranscript: Updater<ClipTranscript>,
     midTranscript: ClipTranscript,

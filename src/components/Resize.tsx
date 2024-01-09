@@ -283,7 +283,7 @@ type TrimSlidersProps = {
     segment: Segment,
     numSegments: number,
     index: number,
-    setHoveringOverSliders: Dispatch<SetStateAction<boolean>>
+    setHoveringOverSliders: SetState<boolean>
 };
 
 export function TrimInterval({

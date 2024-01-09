@@ -4,19 +4,19 @@ import { createContext, useState, ReactNode } from 'react'
 
 type TrimmerContextType = {
     startTime: number,
-    setStartTime: Dispatch<SetStateAction<number>>,
+    setStartTime: SetState<number>,
     endTime: number,
-    setEndTime: Dispatch<SetStateAction<number>>,
+    setEndTime: SetState<number>,
     trimStartTime: number,
-    setTrimStartTime: Dispatch<SetStateAction<number>>,
+    setTrimStartTime: SetState<number>,
     trimEndTime: number,
-    setTrimEndTime: Dispatch<SetStateAction<number>>,
+    setTrimEndTime: SetState<number>,
     startRange: number,
-    setStartRange: Dispatch<SetStateAction<number>>,
+    setStartRange: SetState<number>,
     endRange: number,
-    setEndRange: Dispatch<SetStateAction<number>>,
+    setEndRange: SetState<number>,
     trimming: boolean,
-    setTrimming: Dispatch<SetStateAction<boolean>>,
+    setTrimming: SetState<boolean>,
 }
 
 export const TrimmerContext = createContext<TrimmerContextType>({

@@ -1,11 +1,11 @@
-// React
-import { useContext } from 'react'
-
 // Context
 import { TranscriptContext } from '@/context/transcript'
 
+// React
+import { useContext } from 'react'
+
 // Utils
-import { getNewCharIndex, getWordIndex } from '@/utils/transcript'
+import { getWordIndex } from '@/utils/transcript'
 
 
 export function useTranscript() {
@@ -24,86 +24,78 @@ export function useTranscript() {
         trimStartTime: number,
         trimEndTime: number
     ) => {
-        if (!transcript.word_infos.length) return;
+        if (!transcript.words.length) return;
 
-        const startChar = getNewCharIndex(
-            clip.start_char,
+        let index = getWordIndex(
+            currentWordIndex,
             clip.start_time,
             startTime,
-            transcript.charInfo,
-            "start"
+            transcript.words
         );
-        const endChar = getNewCharIndex(
-            clip.end_char,
+        const startWord = transcript.words[index];
+
+        index = getWordIndex(
+            currentWordIndex,
             clip.end_time,
             endTime,
-            transcript.charInfo,
-            "end"
+            transcript.words
         );
+        const endWord = transcript.words[index];
 
-        const midStartChar = getNewCharIndex(
-            startChar,
+        index = getWordIndex(
+            currentWordIndex,
             startTime,
             trimStartTime,
-            transcript.charInfo,
-            "start"
+            transcript.words
         );
-        const midEndChar = getNewCharIndex(
-            endChar,
+        const midStartWord = transcript.words[index];
+
+        index = getWordIndex(
+            currentWordIndex,
             endTime,
             trimEndTime,
-            transcript.charInfo, 
-            "end"
+            transcript.words
         );
+        const midEndWord = transcript.words[index];
 
-        setTranscriptState(startChar, midStartChar, midEndChar, endChar);
+        setTranscriptState(
+            startWord.start_char,
+            midStartWord.start_char,
+            midEndWord.end_char,
+            endWord.end_char
+        );
     }
 
     const setTranscriptState = (
-        startChar: number,
-        midStartChar: number,
-        midEndChar: number,
-        endChar: number
+        start: number,
+        midStart: number,
+        midEnd: number,
+        end: number
     ) => {
-        if (!transcript.word_infos.length) return;
-
         const transcription = transcript.transcription;
-
         setStartTranscript((draft: ClipTranscript) => {
-            draft.startChar = startChar;
-            draft.endChar = midStartChar;
+            draft.startChar = start;
+            draft.endChar = midStart;
             draft.text = transcription.substring(draft.startChar, draft.endChar);
         });
         setMidTranscript((draft: ClipTranscript) => {
-            draft.startChar = midStartChar;
-            draft.endChar = midEndChar;
+            draft.startChar = midStart;
+            draft.endChar = midEnd;
             draft.text = transcription.substring(draft.startChar, draft.endChar);
         });
         setEndTranscript((draft: ClipTranscript) => {
-            draft.startChar = midEndChar;
-            draft.endChar = endChar;
+            draft.startChar = midEnd;
+            draft.endChar = end;
             draft.text = transcription.substring(draft.startChar, draft.endChar);
         });
     }
 
-    const initTranscript = (startChar: number, endChar: number) => {
-        if (transcript.charInfo.length !== 0) {
-            const wordIndex = transcript.charInfo[startChar].wordIdx;
-            setCurrentWordIndex(wordIndex);
-            setTranscriptState(startChar, startChar, endChar, endChar);
-        }
-    };
-
-    const updateCurrentWord = (
-        startChar: number,
-        startTime: number,
-        currentTime: number
-    ) => {
+    const updateCurrentWord = (startTime: number, currentTime: number) => {
         const wordIndex = getWordIndex(
-            startChar,
+            currentWordIndex,
             startTime,
             currentTime,
-            transcript.word_infos
+            transcript.words
         );
         setCurrentWordIndex(wordIndex);
     }
@@ -114,7 +106,6 @@ export function useTranscript() {
         startTranscript, setStartTranscript,
         midTranscript, setMidTranscript,
         endTranscript, setEndTranscript,
-        initTranscript,
         updateTranscript,
         setTranscriptState,
         updateCurrentWord

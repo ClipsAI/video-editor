@@ -11,9 +11,8 @@ import { useTranscript } from '@/hooks/transcript'
 import { useTrimmer } from '@/hooks/trimmer'
 
 // Utils
-import { round } from '@/utils/math'
 import { convertToTime } from "@/utils/time"
-import { getNewCharIndex } from '@/utils/transcript'
+import { getWordIndex } from '@/utils/transcript'
 import { getSegmentIndex, areSegmentsEqual, isTimeInRange } from '@/utils/crops'
 
 // Icons
@@ -31,8 +30,6 @@ import {
     ContentCut as SplitIcon,
 } from "@mui/icons-material"
 
-
-const BUFFER = 0.25;
 
 export function VideoControls({
     currentTime,
@@ -211,7 +208,7 @@ function VolumeButton() {
 }
 
 function SaveCancelButtons() {
-    const { transcript, setTranscriptState } = useTranscript();
+    const { transcript, currentWordIndex, setTranscriptState } = useTranscript();
     const { clip, setClip, setClips } = useVideo();
     const { setFrame } = useResizer();
     const { segments, setSegments, crops, setCrops, setResizeMode } = useResizer();
@@ -228,46 +225,46 @@ function SaveCancelButtons() {
         resetTrim
     } = useTrimmer();
 
+    const BUFFER = 0.25;
+
     const handleSave = () => {
-        if (!clip.id || !transcript.word_infos.length) return;
+        if (!clip.id || !transcript.words.length) return;
 
         if (trimming) {
-            const newStartTime: number = round(trimStartTime);
-            let newEndTime: number = (endTime === trimEndTime) ? round(trimEndTime) : round(trimEndTime - BUFFER);
+            let index = getWordIndex(
+                currentWordIndex,
+                clip.start_time,
+                trimStartTime,
+                transcript.words,
+            );
+            const startWord = transcript.words[index];
+
+            index = getWordIndex(
+                currentWordIndex,
+                clip.start_time,
+                trimEndTime,
+                transcript.words,
+            );
+            const endWord = transcript.words[index];
 
             setTrimming(false);
-            setStartTime(newStartTime);
-            setEndTime(newEndTime);
+            setStartTime(startWord.start_time);
+            setEndTime(endWord.end_time);
             setStartRange(0);
             setEndRange(100);
 
-            const newStartCharIndex: number = getNewCharIndex(
-                clip.start_char,
-                clip.start_time,
-                trimStartTime,
-                transcript.charInfo,
-                "start"
-            );
-            const newEndCharIndex: number = getNewCharIndex(
-                clip.end_char,
-                clip.end_time,
-                trimEndTime,
-                transcript.charInfo,
-                "end"
-            );
-
             setClip((draft: Clip) => {
-                draft.start_time = newStartTime;
-                draft.end_time = newEndTime;
-                draft.start_char = newStartCharIndex;
-                draft.end_char = newEndCharIndex;
+                draft.start_time = startWord.start_time;
+                draft.end_time = endWord.end_time;
+                draft.start_char = startWord.start_char;
+                draft.end_char = endWord.end_char;
             });
             setClips((drafts: Clip[]) => {
                 const index = drafts.findIndex((draft: Clip) => draft.id === clip.id);
-                drafts[index].start_time = newStartTime;
-                drafts[index].end_time = newEndTime;
-                drafts[index].start_char = newStartCharIndex;
-                drafts[index].end_char = newEndCharIndex;
+                drafts[index].start_time = startWord.start_time;
+                drafts[index].end_time = endWord.end_time;
+                drafts[index].start_char = startWord.start_time;
+                drafts[index].end_char = endWord.end_char;
             });
         } else {
             setResizeMode("Edit");

@@ -9,8 +9,10 @@ import { VideoContext } from '@/context/video'
 // Hooks
 import { useResizer } from '@/hooks/resizer'
 import { useTranscript } from '@/hooks/transcript'
-import { useTrimmer } from '@/hooks/trimmer'
+import { useTrimmerContext } from '@/hooks/trimmer'
 
+
+export const useVideoContext = () => useContext(VideoContext);
 
 export function useVideo() {
     const { 
@@ -23,7 +25,7 @@ export function useVideo() {
         muted, setMuted 
     } = useContext(VideoContext);
     const { setFrame, crops, resizeMode } = useResizer();
-    const { trimEndTime, trimStartTime } = useTrimmer();
+    const { trimEndTime, trimStartTime } = useTrimmerContext();
     const { updateCurrentWord } = useTranscript();
     
     const extendedWidth = (crops.original_width / crops.crop_width) * 100;
@@ -59,8 +61,7 @@ export function useVideo() {
             pause();
             videoPlayer.current.currentTime = trimStartTime;
         } else {
-            const { start_char, start_time } = clip
-            updateCurrentWord(start_char, start_time, currentTime);
+            updateCurrentWord(clip.start_time, currentTime);
         }
 
         if (videoPlayer.current.paused) {

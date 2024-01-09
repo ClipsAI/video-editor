@@ -2,7 +2,7 @@ export const transcript: Transcript = {
 	"id": "f8c4dfa7-0237-42f9-adc1-01811012a6ed",
 	"object": "transcript",
 	"created": 1703945197,
-	"word_infos": [
+	"words": [
 		{
 			"start_char": 0,
 			"end_char": 3,

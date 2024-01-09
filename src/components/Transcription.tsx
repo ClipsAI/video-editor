@@ -10,12 +10,12 @@ export function Transcription() {
         currentWordIndex
     } = useTranscript();
 
-    // if (!transcript.word_infos.length) return <EmptyTranscription />;
+    // if (!transcript.words.length) return <EmptyTranscription />;
 
-    let currentWordStartChar = transcript.word_infos[currentWordIndex].start_char;
+    let currentWordStartChar = transcript.words[currentWordIndex].start_char;
     if (midTranscript.startChar > currentWordStartChar) currentWordStartChar = midTranscript.startChar;
 
-    let currentWordEndChar = transcript.word_infos[currentWordIndex].end_char;
+    let currentWordEndChar = transcript.words[currentWordIndex].end_char;
     if (currentWordEndChar > midTranscript.endChar) currentWordEndChar = midTranscript.endChar;
 
     const preHighlighted = transcript.transcription.substring(midTranscript.startChar, currentWordStartChar);

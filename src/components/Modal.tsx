@@ -28,7 +28,7 @@ export function Modal({
     children
 }: {
     open: boolean,
-    setOpen: Dispatch<SetStateAction<boolean>>,
+    setOpen: SetState<boolean>,
     cancelButtonRef: MutableRefObject<null>,
     children: ReactNode,
 }) {

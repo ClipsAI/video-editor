@@ -18,6 +18,7 @@ import { getWordIndex } from '@/utils/transcript'
 const THROTTLE_DELAY = 50;
 const RANGE_MAX = 100;
 
+export const useTrimmerContext = () => useContext(TrimmerContext);
 
 export function useTrimmer() {
      const { 
@@ -74,7 +75,7 @@ export function useTrimmer() {
                 clip.start_char,
                 clip.start_time,
                 updatedTime,
-                transcript.word_infos
+                transcript.words
             );
             setCurrentWordIndex(wordIndex);
         }
@@ -100,7 +101,7 @@ export function useTrimmer() {
                 clip.start_char,
                 clip.start_time,
                 trimStartTime,
-                transcript.word_infos
+                transcript.words
             );
             setCurrentWordIndex(wordIndex);
         }

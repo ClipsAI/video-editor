@@ -10,8 +10,9 @@ import { getSegmentIndex, findSegmentByTime } from '@/utils/crops'
 
 export function useResizer() {
     const { 
+        currentSegment,  
         crops, setCrops,
-        currentSegment,  segments, setSegments,
+        segments, setSegments,
         resizeLeft, setResizeLeft,
         resizeMode, setResizeMode, 
     } = useContext(ResizerContext);

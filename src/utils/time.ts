@@ -30,12 +30,6 @@ export function convertToTime(
   return new Date(milliseconds).toISOString().slice(startChar, endChar);
 }
 
-export function convertToDate(time: Timestamp): string {
-  const totalMiliseconds: number = (time.seconds + (time.nanoseconds) * 0.00000001) * 1000;
-  const date: Date = new Date(totalMiliseconds)
-  return date.toDateString();
-}
-
 export function computeDuration(start: number, end: number): number {
   return end - start;
 }

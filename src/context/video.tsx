@@ -23,7 +23,7 @@ type VideoContextType = {
     paused: boolean,
     setPaused: SetState<boolean>,
     currentTime: number,
-    setTime: Dispatch<SetStateAction<number>>,
+    setTime: SetState<number>,
 }
 
 export const VideoContext = createContext<VideoContextType>({

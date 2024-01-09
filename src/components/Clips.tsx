@@ -79,30 +79,27 @@ function Clips({ query, interval }: { query: string, interval: Interval }) {
 
 
 function ClipCard({ clip, selected }: { clip: Clip, selected: boolean }) {
-    const {
-        videoPlayer,
-        play,
-        setClip,
-        setClips,
-        setCurrentTime,
-    } = useVideo();
-    const { resetTrim } = useTrimmer();
     const { setFrame } = useResizer();
-    const { initTranscript } = useTranscript();
+    const { resetTrim } = useTrimmer();
+    const { updateCurrentWord, setTranscriptState } = useTranscript();
+    const { videoPlayer, play, setClip, setClips, setCurrentTime } = useVideo();
 
-    const [openRenameModal, setOpenRenameModal] = useState<boolean>(false);
-    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+    const [openRenameModal, setOpenRenameModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     async function handlePlay() {
         if (!videoPlayer.current || !clip.id) {
             return;
         }
 
+        const { start_time, end_time, start_char, end_char } = clip;
+
         setClip(clip);
-        setFrame(clip.start_time);
-        setCurrentTime(clip.start_time);
-        resetTrim(clip.start_time, clip.end_time);
-        initTranscript(clip.start_char, clip.end_char);
+        setFrame(start_time);
+        setCurrentTime(start_time);
+        resetTrim(start_time, end_time);
+        updateCurrentWord(start_time, start_time);
+        setTranscriptState(start_char, start_char, end_char, end_char);
 
         await play();
     }

@@ -51,11 +51,11 @@ type Transcript = {
     id: string,
     object: "transcript",
     created: number,
-    word_infos: WordInfo[],
+    words: Word[],
     transcription: string
 }
 
-type WordInfo = {
+type Word = {
     start_char: number,
     end_char: number,
     start_time: number,
