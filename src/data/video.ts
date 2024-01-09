@@ -1338,7 +1338,7 @@ export const video: Video = {
         "file_size": 397758990,
         "mime_type": "video/mp4"
     },
-    "source": "https://youtu.be/Wq16lyNpmYs?si=0W8Qgk_SDPV_x-Tn",
+    "source": "https://firebasestorage.googleapis.com/v0/b/cai-staging.appspot.com/o/FuscOaAaahTqrpzSy9YFFF3MyCo1%2Ff8c4dfa7-0237-42f9-adc1-01811012a6ed%2Fmedia?alt=media&token=fe6ed5e9-dadd-47d5-bea5-b1adfbe2d857",
     "status": "complete",
     "title": "The Playbook: Lessons from 200+ Company Stories"
 }
