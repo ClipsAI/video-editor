@@ -21,7 +21,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 
 // Utils
-import { getFilteredClips } from '@/utils/clips'
+import { filterClips } from '@/utils/clips'
 import { convertToDuration, convertToTime } from '@/utils/time'
 import { classNames } from '@/utils/styling'
 
@@ -55,7 +55,7 @@ function Clips({ query, interval }: { query: string, interval: Interval }) {
     const { clip, clips } = useVideo();
     const { transcript } = useTranscript();
 
-    const filteredClips = getFilteredClips(clips, interval, query, transcript);
+    const filteredClips = filterClips(clips, interval, query, transcript);
 
     return (
         <div className="flex flex-col">
@@ -98,7 +98,7 @@ function ClipCard({ clip, selected }: { clip: Clip, selected: boolean }) {
         setFrame(start_time);
         setCurrentTime(start_time);
         resetTrim(start_time, end_time);
-        updateCurrentWord(start_time, start_time);
+        updateCurrentWord(start_time);
         setTranscriptState(start_char, start_char, end_char, end_char);
 
         await play();

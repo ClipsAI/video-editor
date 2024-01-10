@@ -12,7 +12,6 @@ import { useTranscript } from '@/hooks/transcript'
 
 // Utils
 import { computeDuration } from '@/utils/time'
-import { getWordIndex } from '@/utils/transcript'
 
 
 const THROTTLE_DELAY = 50;
@@ -32,7 +31,7 @@ export function useTrimmer() {
     } = useContext(TrimmerContext);
     const { resizeMode } = useResizer();
     const { videoPlayer, clip, setCurrentTime } = useVideo();
-    const { transcript, setCurrentWordIndex } = useTranscript();
+    const { transcript, setCurrentWordIndex, updateCurrentWord } = useTranscript();
    
 
     const { updateTranscript } = useTranscript();
@@ -65,19 +64,12 @@ export function useTrimmer() {
         const updatedTime = ((range / RANGE_MAX) * clipDuration) + startTime;
         setTrimStartTime(updatedTime);
 
-        updateTranscript(clip, startTime, endTime, updatedTime, trimEndTime);
+        updateTranscript(startTime, endTime, updatedTime, trimEndTime);
 
         const videoPlayerPaused = videoPlayer.current.paused
         if (videoPlayerPaused && videoPlayer.current.currentTime < updatedTime) {
             setCurrentTime(updatedTime);
-
-            const wordIndex = getWordIndex(
-                clip.start_char,
-                clip.start_time,
-                updatedTime,
-                transcript.words
-            );
-            setCurrentWordIndex(wordIndex);
+            updateCurrentWord(updatedTime);
         }
     }, THROTTLE_DELAY);
 
@@ -91,19 +83,12 @@ export function useTrimmer() {
         const updatedTime = ((range / RANGE_MAX) * clipDuration) + startTime;
         setTrimEndTime(updatedTime);
 
-        updateTranscript(clip, startTime, endTime, trimStartTime, updatedTime);
+        updateTranscript(startTime, endTime, trimStartTime, updatedTime);
 
         const videoPlayerPaused = videoPlayer.current && videoPlayer.current.paused
         if (videoPlayerPaused && videoPlayer.current.currentTime > updatedTime) {
             setCurrentTime(trimStartTime);
-
-            const wordIndex = getWordIndex(
-                clip.start_char,
-                clip.start_time,
-                trimStartTime,
-                transcript.words
-            );
-            setCurrentWordIndex(wordIndex);
+            updateCurrentWord(trimStartTime);
         }
     }, THROTTLE_DELAY);
 
@@ -150,7 +135,7 @@ export function useExtendRange() {
         const updatedStartTime = Math.max(startTime - DURATION_INCREMENT, 0);
         setStartTime(updatedStartTime);
 
-        updateTranscript(clip, updatedStartTime, endTime, trimStartTime, trimEndTime);
+        updateTranscript(updatedStartTime, endTime, trimStartTime, trimEndTime);
 
         const value = (updatedStartTime === 0) ? localStartTime + startTime : localStartTime + DURATION_INCREMENT;
         const updatedStartRange = (value / duration) * RANGE_MAX;
@@ -166,7 +151,7 @@ export function useExtendRange() {
         const newEndTime = Math.min(endTime + DURATION_INCREMENT, video.metadata.duration);
         setEndTime(newEndTime);
 
-        updateTranscript(clip, startTime, newEndTime, trimStartTime, trimEndTime);
+        updateTranscript(startTime, newEndTime, trimStartTime, trimEndTime);
 
         const updatedStartRange = (localStartTime / duration) * RANGE_MAX;
         setStartRange(updatedStartRange);

@@ -12,7 +12,7 @@ import { useTrimmer } from '@/hooks/trimmer'
 
 // Utils
 import { convertToTime } from "@/utils/time"
-import { getWordIndex } from '@/utils/transcript'
+import { getWordIndexByTime } from '@/utils/transcript'
 import { getSegmentIndex, areSegmentsEqual, isTimeInRange } from '@/utils/crops'
 
 // Icons
@@ -231,20 +231,10 @@ function SaveCancelButtons() {
         if (!clip.id || !transcript.words.length) return;
 
         if (trimming) {
-            let index = getWordIndex(
-                currentWordIndex,
-                clip.start_time,
-                trimStartTime,
-                transcript.words,
-            );
+            let index = getWordIndexByTime(trimStartTime, transcript.words);
             const startWord = transcript.words[index];
 
-            index = getWordIndex(
-                currentWordIndex,
-                clip.start_time,
-                trimEndTime,
-                transcript.words,
-            );
+            index = getWordIndexByTime(trimEndTime, transcript.words);
             const endWord = transcript.words[index];
 
             setTrimming(false);

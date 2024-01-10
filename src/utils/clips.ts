@@ -30,7 +30,7 @@ function isClipDurationInRange(clip: Clip, interval: Interval): boolean {
  * @param transcript - The transcript information to extract clip transcripts.
  * @returns - The filtered list of clips.
  */
-export function getFilteredClips(
+export function filterClips(
     clips: Clip[],
     interval: Interval,
     query: string,

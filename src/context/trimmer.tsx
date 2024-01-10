@@ -1,6 +1,9 @@
 // React
 import { createContext, useState, ReactNode } from 'react'
 
+// Hooks
+import { useVideoContext } from '@/hooks/video'
+
 
 type TrimmerContextType = {
     startTime: number,
@@ -37,10 +40,12 @@ export const TrimmerContext = createContext<TrimmerContextType>({
 });
 
 export function TrimmerProvider({ children }: { children: ReactNode }) {
-    const [startTime, setStartTime] = useState<number>(0);
-    const [endTime, setEndTime] = useState<number>(0);
-    const [trimStartTime, setTrimStartTime] = useState<number>(0);
-    const [trimEndTime, setTrimEndTime] = useState<number>(0);
+    const { clip } = useVideoContext();
+
+    const [startTime, setStartTime] = useState<number>(clip.start_time);
+    const [endTime, setEndTime] = useState<number>(clip.end_time);
+    const [trimStartTime, setTrimStartTime] = useState<number>(clip.start_time);
+    const [trimEndTime, setTrimEndTime] = useState<number>(clip.end_time);
     const [startRange, setStartRange] = useState<number>(0);
     const [endRange, setEndRange] = useState<number>(100);
     const [trimming, setTrimming] = useState<boolean>(false);

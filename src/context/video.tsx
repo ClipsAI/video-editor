@@ -1,10 +1,15 @@
 'use client'
 
+// Data
+import { intervals } from '@/data/clips'
+import { video as video_data } from '@/data/video'
+import { transcript } from '@/data/transcript'
+
 // React
 import { ReactNode, createContext, useState, useRef, MutableRefObject } from 'react'
 
-// Data
-import { video as video_data } from '@/data/video'
+// Utils
+import { filterClips } from '@/utils/clips'
 
 // Third-party Libraries
 import { useImmer, Updater } from 'use-immer'
@@ -49,8 +54,13 @@ export function VideoProvider({ children }: { children: ReactNode }) {
     const [paused, setPaused] = useState<boolean>(true);
     const [currentTime, setTime] = useState<number>(0);
 
+    
+
     const [video, setVideo] = useImmer<Video>(video_data);
-    const [clip, setClip] = useImmer<Clip>(video_data.clips[0]);
+    const [clip, setClip] = useImmer<Clip>(() => {
+        const result = filterClips(video_data.clips, intervals[0], "", transcript);
+        return result[0];
+    });
     const [clips, setClips] = useImmer<Clip[]>(video_data.clips);
 
     const clipInfo = {

@@ -61,7 +61,7 @@ export function useVideo() {
             pause();
             videoPlayer.current.currentTime = trimStartTime;
         } else {
-            updateCurrentWord(clip.start_time, currentTime);
+            updateCurrentWord(currentTime);
         }
 
         if (videoPlayer.current.paused) {

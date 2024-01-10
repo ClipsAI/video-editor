@@ -5,7 +5,7 @@ import { TranscriptContext } from '@/context/transcript'
 import { useContext } from 'react'
 
 // Utils
-import { getWordIndex } from '@/utils/transcript'
+import { getWordIndexByTime } from '@/utils/transcript'
 
 
 export function useTranscript() {
@@ -18,7 +18,6 @@ export function useTranscript() {
     } = useContext(TranscriptContext);
 
     const updateTranscript = (
-        clip: Clip,
         startTime: number,
         endTime: number,
         trimStartTime: number,
@@ -26,36 +25,16 @@ export function useTranscript() {
     ) => {
         if (!transcript.words.length) return;
 
-        let index = getWordIndex(
-            currentWordIndex,
-            clip.start_time,
-            startTime,
-            transcript.words
-        );
+        let index = getWordIndexByTime(startTime, transcript.words);
         const startWord = transcript.words[index];
 
-        index = getWordIndex(
-            currentWordIndex,
-            clip.end_time,
-            endTime,
-            transcript.words
-        );
+        index = getWordIndexByTime(endTime, transcript.words);
         const endWord = transcript.words[index];
 
-        index = getWordIndex(
-            currentWordIndex,
-            startTime,
-            trimStartTime,
-            transcript.words
-        );
+        index = getWordIndexByTime(trimStartTime, transcript.words);
         const midStartWord = transcript.words[index];
 
-        index = getWordIndex(
-            currentWordIndex,
-            endTime,
-            trimEndTime,
-            transcript.words
-        );
+        index = getWordIndexByTime(trimEndTime, transcript.words);
         const midEndWord = transcript.words[index];
 
         setTranscriptState(
@@ -90,10 +69,8 @@ export function useTranscript() {
         });
     }
 
-    const updateCurrentWord = (startTime: number, currentTime: number) => {
-        const wordIndex = getWordIndex(
-            currentWordIndex,
-            startTime,
+    const updateCurrentWord = (currentTime: number) => {
+        const wordIndex = getWordIndexByTime(
             currentTime,
             transcript.words
         );

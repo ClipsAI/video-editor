@@ -4,6 +4,12 @@ import { ReactNode, createContext, useState } from 'react'
 // Data
 import { transcript as transcript_data } from '@/data/transcript'
 
+// Hooks
+import { useVideoContext } from '@/hooks/video'
+
+// Utils
+import { getWordIndexByChar } from '@/utils/transcript'
+
 // Third-party Libraries
 import { useImmer, Updater } from 'use-immer'
 
@@ -35,22 +41,26 @@ export const TranscriptContext = createContext<TranscriptContextType>({
 });
 
 export function TranscriptProvider({ children }: { children: ReactNode }) {
+    const { clip } = useVideoContext();
+
     const [transcript, setTranscript] = useImmer<Transcript>(transcript_data);
-    const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
+    const [currentWordIndex, setCurrentWordIndex] = useState<number>(
+        getWordIndexByChar(clip.start_char, transcript.words)
+    );
     const [startTranscript, setStartTranscript] = useImmer<ClipTranscript>({
-        startChar: 0,
-        endChar: 0,
-        text: ""
+        startChar: clip.start_char,
+        endChar: clip.start_char,
+        text: transcript_data.transcription.substring(clip.start_char, clip.start_char)
     });
     const [midTranscript, setMidTranscript] = useImmer<ClipTranscript>({
-        startChar: 0,
-        endChar: 0,
-        text: ""
+        startChar: clip.start_char,
+        endChar: clip.end_char,
+        text: transcript_data.transcription.substring(clip.start_char, clip.end_char)
     });
     const [endTranscript, setEndTranscript] = useImmer<ClipTranscript>({
-        startChar: 0,
-        endChar: 0,
-        text: ""
+        startChar: clip.end_char,
+        endChar: clip.end_char,
+        text: transcript_data.transcription.substring(clip.end_char, clip.end_char)
     });
 
     const transcriptContext = {
