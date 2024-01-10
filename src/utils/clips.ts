@@ -53,8 +53,10 @@ export function filterClips(
     });
 
     filteredClips.sort((a, b) => {
-        if (a.favorited === b.favorited) return 0;
-        return a.favorited ? -1 : 1;
+        if (a.favorited !== b.favorited) {
+            return a.favorited ? -1 : 1;
+        }
+        return a.start_time - b.start_time;
     });
 
     return filteredClips;
