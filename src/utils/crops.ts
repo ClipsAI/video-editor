@@ -25,21 +25,6 @@ export function findSegmentByTime(time: number, segments: Segment[]) {
 }
 
 /**
- * Helper function to get the start time of a segment.
- * @param index - The index of the segment in the array.
- * @param segments - The array of segments.
- * @returns The start time of the segment.
- */
-export function getSegmentStartTime(index: number, segments: Segment[]): number {
-    if (index === 0) {
-        return 0;
-    }
-
-    const delta = 0.001;
-    return segments[index - 1].end_time + delta;
-};
-
-/**
  * Get a list of segments that are within a specified time range.
  * @param startTime - The start time of the range.
  * @param end_time - The end time of the range.
@@ -84,11 +69,12 @@ export function areSegmentsEqual(resizedSegments: Segment[], editedSegments: Seg
  * @param segments - The array of segments.
  * @returns boolean - Whether the time is within the segment's range.
  */
-export function isTimeInRange(time: number, index: number, segments: Segment[]): boolean {
-    const startTime = getSegmentStartTime(index, segments);
-    const end_time = segments[index].end_time;
-
-    return time > startTime && time < end_time;
+export function isTimeInRange(
+    time: number,
+    index: number,
+    segments: Segment[]
+): boolean {
+    return time > segments[index].start_time && time < segments[index].end_time;
 }
 
 /**
@@ -107,12 +93,11 @@ export function getResizeIndex(mode: ResizeMode, segments: Segment[]): number {
         case "16:9":
             return 0;
         case "9:16":
+            return 1;
         case "Edit":
-        case "Editing":
-            if (segments.length > 0) {
-                return 1;
-            };
+        case "Editing":    
+            return 2;
         default:
-            return 0;
+            return 1;
     }
 }

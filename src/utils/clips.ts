@@ -33,8 +33,8 @@ function isClipDurationInRange(clip: Clip, interval: Interval): boolean {
 export function filterClips(
     clips: Clip[],
     interval: Interval,
-    query: string,
-    transcript: Transcript
+    transcript: Transcript,
+    query: string = "",
 ): Clip[] {
     const filteredClips: Clip[] = clips.filter((clip) => {
         if (clip.deleted || !isClipDurationInRange(clip, interval)) {

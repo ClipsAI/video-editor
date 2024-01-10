@@ -50,18 +50,15 @@ export const VideoContext = createContext<VideoContextType>({
 export function VideoProvider({ children }: { children: ReactNode }) {
     const videoPlayer = useRef<HTMLVideoElement | null>(null);
 
+    const initClip = filterClips(video_data.clips, intervals[0], transcript)[0];
+
+    const [clip, setClip] = useImmer<Clip>(initClip);
+    const [video, setVideo] = useImmer<Video>(video_data);
+    const [clips, setClips] = useImmer<Clip[]>(video_data.clips);
+
     const [muted, setMuted] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(true);
-    const [currentTime, setTime] = useState<number>(0);
-
-    
-
-    const [video, setVideo] = useImmer<Video>(video_data);
-    const [clip, setClip] = useImmer<Clip>(() => {
-        const result = filterClips(video_data.clips, intervals[0], "", transcript);
-        return result[0];
-    });
-    const [clips, setClips] = useImmer<Clip[]>(video_data.clips);
+    const [currentTime, setTime] = useState<number>(initClip.start_time);
 
     const clipInfo = {
         videoPlayer,

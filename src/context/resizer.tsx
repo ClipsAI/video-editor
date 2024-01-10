@@ -4,6 +4,12 @@ import { ReactNode, createContext, useState, useRef, MutableRefObject } from 're
 // Data
 import { crops as crops_data } from '@/data/crops'
 
+// Hooks
+import { useVideoContext } from '@/hooks/video'
+
+// Utils
+import { getSegmentIndex } from '@/utils/crops'
+
 // Third-party Libraries
 import { useImmer, Updater } from 'use-immer'
 
@@ -33,11 +39,18 @@ export const ResizerContext = createContext<ResizerContextType>({
 });
 
 export function ResizerProvider({ children }: { children: ReactNode }) {
+    const { clip } = useVideoContext();
+
+    const i = getSegmentIndex(clip.start_time, crops_data.segments);
+    const currentSegment = useRef<Segment>(crops_data.segments[i]);
+
     const [crops, setCrops] = useImmer<Crops>(crops_data);
-    const currentSegment = useRef<Segment>(crops_data.segments[0]);
     const [segments, setSegments] = useImmer<Segment[]>(crops_data.segments);
 
-    const [resizeLeft, setResizeLeft] = useState<number>(0);
+
+    const [resizeLeft, setResizeLeft] = useState<number>(
+        (crops_data.segments[i].x / crops_data.original_width) * 100
+    );
     const [resizeMode, setResizeMode] = useState<ResizeMode>("9:16");
     
     const resizeContext = {

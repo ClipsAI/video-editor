@@ -86,6 +86,8 @@ function TabContainer({ children }: { children: ReactNode }) {
             setResizeMode("16:9");
         } else if (index === 1) {
             setResizeMode("9:16");
+        } else if (index === 2) {
+            setResizeMode("Edit");
         }
 
         if (resizeMode === "Editing") {

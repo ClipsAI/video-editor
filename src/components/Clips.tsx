@@ -55,7 +55,7 @@ function Clips({ query, interval }: { query: string, interval: Interval }) {
     const { clip, clips } = useVideo();
     const { transcript } = useTranscript();
 
-    const filteredClips = filterClips(clips, interval, query, transcript);
+    const filteredClips = filterClips(clips, interval, transcript, query);
 
     return (
         <div className="flex flex-col">
