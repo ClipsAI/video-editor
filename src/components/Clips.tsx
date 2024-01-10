@@ -34,7 +34,7 @@ export function ClipEditor({ interval }: { interval: Interval }) {
     const edit = resizeMode == "Edit" || resizeMode == "Editing";
 
     return (
-        <div className="flex flex-col justify-between p-4 sm:p-6">
+        <div className="flex flex-col w-full justify-between p-4 sm:p-6">
             <div className="flex w-full mb-4 space-x-4">
                 <Search setQuery={setQuery} placeholder="Search using keywords" />
                 <ResizeToggle />

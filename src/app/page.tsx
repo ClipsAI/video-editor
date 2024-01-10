@@ -20,7 +20,7 @@ export default function Editor() {
 
     return (
         <VideoEditorProvider>
-            <div className="rounded-lg border border-gray-300 bg-white">
+            <div className="rounded-lg border border-gray-300">
                 <Header setInterval={setInterval}/>
                 <ClipEditor interval={interval}/>
                 <Transcription />

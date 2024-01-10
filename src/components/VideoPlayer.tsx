@@ -1,5 +1,5 @@
 // Components
-import { Trimming } from '@/components/Trimmer'
+import { Trimmer } from '@/components/Trimmer'
 import { VideoControls } from '@/components/VideoControls'
 import { ResizeTrimmer } from '@/components/Resize'
 import { Video } from '@/components/Video'
@@ -8,6 +8,9 @@ import { Video } from '@/components/Video'
 import { useVideo } from '@/hooks/video'
 import { useResizer } from '@/hooks/resizer'
 import { useTrimmer } from '@/hooks/trimmer'
+
+// Styles
+import '@/styles/trimmer.css'
 
 
 export function VideoPlayer() {
@@ -25,7 +28,7 @@ export function VideoPlayer() {
                 currentTime={currentTime - trimStartTime}
             />
             {view ? (
-                <Trimming />
+                <Trimmer />
             ) : (
                 <ResizeTrimmer />
             )}

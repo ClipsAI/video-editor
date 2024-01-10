@@ -11,7 +11,8 @@ import { useVideo } from '@/hooks/video'
 import { MdDelete } from 'react-icons/md'
 import {
     CropLandscape as HorizontalVideo,
-    CropPortrait as VerticalVideo
+    CropPortrait as VerticalVideo,
+    CropFree as EditVideo
 } from '@mui/icons-material'
 
 // React
@@ -40,6 +41,11 @@ export function ResizeToggle() {
             name: "9:16",
             icon: VerticalVideo,
         },
+        {
+            id: 3,
+            name: "Edit",
+            icon: EditVideo,
+        },
     ]
 
     return (
@@ -56,7 +62,7 @@ export function ResizeToggle() {
                     )}
                 >
                     <div className="flex items-center justify-center">
-                        <tab.icon className="h-5 w-6" />
+                        <tab.icon className="h-6 w-6" />
                     </div>
                 </Tab>
             ))}
@@ -88,7 +94,7 @@ function TabContainer({ children }: { children: ReactNode }) {
     }
 
     return (
-        <div className="w-24 max-w-lg">
+        <div className="w-32 max-w-lg">
             <Tab.Group selectedIndex={selectedIndex} onChange={handleChange}>
                 <Tab.List
                     className="flex space-x-1 rounded-lg bg-blue-900/20 p-[0.30rem]"

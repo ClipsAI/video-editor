@@ -10,12 +10,12 @@ export function Search({
     setQuery: SetState<string>
 }) {
     return (
-        <form>
+        <form className="w-full">
             <label htmlFor="search" className="sr-only">
-                Search
+                Search for Clips
             </label>
             <div className="relative">
-                <div 
+                <div
                     className="absolute inset-y-0 left-0 flex
                     items-center pl-3 pointer-events-none"
                 >
@@ -29,7 +29,7 @@ export function Search({
                     id="search"
                     placeholder={placeholder}
                     onChange={(event) => setQuery(event.target.value)}
-                    className="block w-full p-2.5 pl-10 text-sm text-gray-900 border
+                    className="block w-full px-2.5 py-3 pl-10 text-sm text-gray-900 border
                     border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500
                     focus:border-blue-500"
                 />

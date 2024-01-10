@@ -16,7 +16,7 @@ import { AddCircleOutline as PlusIcon } from '@mui/icons-material'
 const RANGE_MAX = 100;
 const STEP = 0.0001;
 
-export function Trimming() {
+export function Trimmer() {
     const { resizeMode } = useResizer();
     const canExtendRange = ['16:9', '9:16'].includes(resizeMode);
 
