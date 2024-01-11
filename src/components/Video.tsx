@@ -1,12 +1,34 @@
 // React
 import { MutableRefObject, ReactNode } from 'react'
 
+// Components
+import { Trimmer } from '@/components/Trimmer'
+import { VideoControls } from '@/components/VideoControls'
+import { ResizeTrimmer } from '@/components/Resize'
+
 // Hooks
 import { useResizer } from '@/hooks/resizer'
+import { useTrimmer } from '@/hooks/trimmer'
 import { useVideo } from '@/hooks/video'
 
 
-export function Video() {
+export function VideoPlayer() {
+    const { currentTime } = useVideo();
+    const { trimStartTime, trimEndTime } = useTrimmer();
+
+    return (
+        <div className="flex flex-col justify-between">
+            <Video />
+            <VideoControls
+                duration={trimEndTime - trimStartTime}
+                currentTime={currentTime - trimStartTime}
+            />
+            <Trimmer />
+        </div >
+    )
+}
+
+function Video() {
     const { 
         video,
         videoPlayer,

@@ -1,11 +1,9 @@
-'use client'
-
 // Components
 import { Search } from '@/components/Search'
-import { VideoPlayer } from '@/components/VideoPlayer'
+import { VideoPlayer } from '@/components/Video'
 import { OptionsMenu, Option } from '@/components/Options'
 import { RenameModal, DeleteModal } from '@/components/Modal'
-import { ResizeToggle, Segments } from '@/components/Resize'
+import { ResizeToggle } from '@/components/Resize'
 
 // Hooks
 import { useVideo } from '@/hooks/video'
@@ -27,11 +25,7 @@ import { classNames } from '@/utils/styling'
 
 
 export function ClipEditor({ interval }: { interval: Interval }) {
-    const { resizeMode } = useResizer();
     const [query, setQuery] = useState("");
-
-    const view = resizeMode == "16:9" || resizeMode == "9:16";
-    const edit = resizeMode == "Edit" || resizeMode == "Editing";
 
     return (
         <div className="flex flex-col w-full justify-between p-4 sm:p-6">
@@ -40,8 +34,7 @@ export function ClipEditor({ interval }: { interval: Interval }) {
                 <ResizeToggle />
             </div>
             <div className="grid gap-x-6 grid-cols-3">
-                {view && <Clips query={query} interval={interval} />}
-                {edit && <Segments />}
+                <Clips query={query} interval={interval} />
                 <div className="col-span-2">
                     <VideoPlayer />
                 </div>
