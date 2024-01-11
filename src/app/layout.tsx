@@ -1,6 +1,8 @@
 // Next
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+
+// Providers
+import { Providers } from '@/app/providers'
 
 // Styles
 import '@/styles/tailwind.css'
@@ -18,12 +20,14 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" className="h-full" suppressHydrationWarning>
-            <body className="flex min-h-full flex-col">
-                <main className="flex-1">
-                    <div className="mx-auto py-6 px-4 sm:px-6 md:px-8">
-                        {children}
-                    </div>
-                </main>
+            <body className="flex min-h-full flex-col bg-white dark:bg-zinc-900">
+                <Providers>
+                    <main className="flex-1">
+                        <div className="mx-auto py-6 px-4 sm:px-6 md:px-8">
+                            {children}
+                        </div>
+                    </main>
+                </Providers>
             </body>
         </html>
     )

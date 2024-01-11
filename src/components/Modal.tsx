@@ -21,7 +21,7 @@ import { Edit, Delete } from "@mui/icons-material"
 import { Dialog, Transition } from '@headlessui/react'
 
 
-export function Modal({
+export function ModalLayout({
     open,
     setOpen,
     cancelButtonRef,
@@ -73,7 +73,7 @@ export function Modal({
                         >
                             <Dialog.Panel
                                 className="relative transform overflow-hidden rounded-lg
-                                bg-white text-left shadow-xl transition-all sm:my-8
+                                text-left shadow-xl transition-all sm:my-8
                                 sm:w-full sm:max-w-lg"
                             >
                                 {children}
@@ -97,7 +97,7 @@ function ModalContent({
     return (
         <div
             onKeyDown={handleKeyDown}
-            className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
+            className="bg-white dark:bg-zinc-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
         >
             <div className="sm:flex sm:items-start">
                 {children}
@@ -111,7 +111,7 @@ function ModalIcon({ children }: { children: ReactNode }) {
     return (
         <div
             className="mx-auto flex h-12 w-12 flex-shrink-0 items-center
-            justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+            justify-center rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10"
         >
             {children}
         </div>
@@ -133,7 +133,10 @@ function ModalButtons({
     cancelButtonRef: MutableRefObject<null>
 }) {
     return (
-        <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+        <div 
+            className="bg-gray-50 dark:bg-zinc-800
+            px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
+        >
             <button
                 type="button"
                 className={classNames(
@@ -146,9 +149,10 @@ function ModalButtons({
             </button>
             <button
                 type="button"
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white
+                className="mt-3 inline-flex w-full justify-center rounded-md 
                 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1
-                ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto dark:text-white/90
+                bg-white dark:bg-zinc-800 ring-gray-300 dark:ring-white/20"
                 onClick={onCancel}
                 ref={cancelButtonRef}
             >
@@ -187,7 +191,7 @@ export function RenameModal({
     };
 
     return (
-        <Modal open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef}>
+        <ModalLayout open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef}>
             <ModalContent handleKeyDown={handleKeyDown}>
                 <ModalIcon>
                     <Edit className="h-6 w-6 text-blue-600" aria-hidden="true" />
@@ -201,7 +205,7 @@ export function RenameModal({
                 cancelButtonRef={cancelButtonRef}
                 className="bg-blue-600 hover:bg-blue-500"
             />
-        </Modal>
+        </ModalLayout>
     )
 }
 
@@ -211,7 +215,8 @@ function RenameInput({ name, setName }: { name: string, setName: SetState<string
         <div className="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
             <Dialog.Title
                 as="h3"
-                className="mt-2 text-lg font-semibold leading-6 text-gray-900"
+                className="mt-2 text-lg font-semibold leading-6
+                text-gray-900 dark:text-white/90"
             >
                 Rename Clip
             </Dialog.Title>
@@ -223,9 +228,11 @@ function RenameInput({ name, setName }: { name: string, setName: SetState<string
                     onChange={(event) => setName(event.target.value)}
                     onFocus={(event) => event.target.select()}
                     className="block w-full rounded-lg border-0 px-4 py-1.5
-                    text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
-                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset
-                    focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    text-gray-900 shadow-sm ring-1 ring-gray-300 sm:leading-6
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset ring-inset
+                    focus:ring-indigo-600 sm:text-sm bg-white dark:bg-zinc-900
+                    dark:placeholder-gray-600 dark:text-white/90
+                    dark:ring-white/20"
                     placeholder={name}
                 />
             </div>
@@ -255,7 +262,7 @@ export function DeleteModal({
     }
 
     return (
-        <Modal open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef}>
+        <ModalLayout open={open} setOpen={setOpen} cancelButtonRef={cancelButtonRef}>
             <ModalContent>
                 <ModalIcon>
                     <Delete className="h-6 w-6 text-red-600" aria-hidden="true" />
@@ -273,7 +280,7 @@ export function DeleteModal({
                         : "bg-red-600 hover:bg-red-500"
                 }
             />
-        </Modal>
+        </ModalLayout>
     )
 }
 
@@ -281,13 +288,17 @@ export function DeleteModal({
 function DeleteLabel({ title }: { title: string }) {
     return (
         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-            <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+            <Dialog.Title
+                as="h3"
+                className="text-base font-semibold leading-6
+                text-gray-900 dark:text-white/90"
+            >
                 Delete Clip
             </Dialog.Title>
             <div className="mt-2">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                     Are you sure you want to delete the clip {" "}
-                    <span className="font-semibold text-gray-600">
+                    <span className="font-semibold text-gray-600 dark:text-gray-200">
                         {title}
                     </span>?
                 </p>

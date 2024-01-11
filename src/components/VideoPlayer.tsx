@@ -9,9 +9,6 @@ import { useVideo } from '@/hooks/video'
 import { useResizer } from '@/hooks/resizer'
 import { useTrimmer } from '@/hooks/trimmer'
 
-// Styles
-import '@/styles/trimmer.css'
-
 
 export function VideoPlayer() {
     const { currentTime } = useVideo();

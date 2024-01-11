@@ -22,9 +22,9 @@ export function Trimmer() {
 
     return (
         <div className="flex">
-            {canExtendRange && <ExtendRangeButton direction="start" />}
+            <ExtendRangeButton direction="start" />
             <DurationTrimmer />
-            {canExtendRange && <ExtendRangeButton direction="end" />}
+            <ExtendRangeButton direction="end" />
         </div>
     );
 }
@@ -59,7 +59,7 @@ function DurationTrimmer() {
             onPointerEnter={() => setVisibleCursor(true)}
             onPointerLeave={() => setVisibleCursor(false)}
             className={classNames(
-                "range_pack w-full",
+                "relative w-full flex justify-center mt-2 mb-0",
                 ["16:9", "9:16"].includes(resizeMode) ? "mx-1" : "mx-0"
             )}
         >
@@ -156,8 +156,8 @@ export function SliderBox({ start, end }: { start: number, end: number }) {
 
     return (
         <div
-            id="clip_box"
-            className="clip_box relative bg-blue-400/80"
+            className="absolute h-[110%] rounded-xl transform -translate-y-[4%]
+            shadow-2xl border-2 border-blue-800 bg-blue-400/80 dark:bg-blue-500"
             style={widthStyle}
         >
             <SliderThumb position="left" />
@@ -172,7 +172,7 @@ function SliderThumb({ position }: { position: "left" | "right" }) {
             id={`${position}-slider-thumb`}
             className={classNames(
                 (position === 'left') ? "left-0 ml-[1px]" : "right-0 mr-[1px]",
-                "absolute top-[20%] w-1 h-[60%] rounded-xl bg-blue-600"
+                "absolute top-[20%] w-1 h-[60%] rounded-xl bg-blue-800"
             )}
         />
     );
@@ -196,7 +196,7 @@ export function Cursor({
     return (
         <div
             className={
-                `relative h-full z-30 rounded-lg bg-blue-400
+                `relative h-full z-30 rounded-lg bg-blue-800
                 ${hoveringOverSliders ? 'w-0' : 'w-[0.15rem]'} 
                 ${visible ? 'visible' : 'invisible'}`
             }
@@ -219,7 +219,7 @@ export function TimeMarker({ currentRange }: { currentRange: number }) {
     return (
         <div
             id="time-marker"
-            className="relative h-full w-[0.15rem] z-30 rounded-lg bg-blue-600"
+            className="relative h-full w-[0.15rem] z-30 rounded-lg bg-blue-800"
             style={{ left: `${currentRange - 0.3}%` }}
         />
     );
@@ -244,7 +244,10 @@ function ExtendRangeButton({ direction }: { direction: "start" | "end" }) {
             className="mt-4"
             onClick={handleExtendRange}
         >
-            <PlusIcon sx={{ fontSize: 26 }} className="text-blue-600" />
+            <PlusIcon
+                sx={{ fontSize: 26 }}
+                className="text-blue-600 dark:text-white/90"
+            />
         </TooltipButton>
     );
 }

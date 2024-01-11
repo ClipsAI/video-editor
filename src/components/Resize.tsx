@@ -57,12 +57,14 @@ export function ResizeToggle() {
                         "relative w-full rounded-md p-1.5 text-sm font-medium",
                         "leading-5 text-blue-700 focus:outline-none",
                         selected
-                            ? 'bg-white shadow'
-                            : 'hover:bg-white/[0.12] hover:text-white'
+                            ? 'bg-white/90 dark:bg-blue-600 shadow'
+                            : 'hover:bg-white/[0.12] hover:text-white/90'
                     )}
                 >
                     <div className="flex items-center justify-center">
-                        <tab.icon className="h-6 w-6" />
+                        <tab.icon 
+                            className="h-6 w-6 text-blue-600 dark:text-white/90"
+                        />
                     </div>
                 </Tab>
             ))}
@@ -257,7 +259,7 @@ export function ResizeTrimmer() {
             onPointerEnter={() => setVisibleCursor(true)}
             onPointerLeave={() => setVisibleCursor(false)}
             className={classNames(
-                "range_pack w-full",
+                "relative w-full flex justify-center mt-2 mb-0",
                 ["16:9", "9:16"].includes(resizeMode) ? "mx-1" : "mx-0"
             )}
         >
@@ -359,8 +361,8 @@ export function SliderBox({ start, end }: { start: number, end: number }) {
 
     return (
         <div
-            id="clip_box"
-            className="clip_box relative bg-blue-400/80"
+            className="absolute h-[110%] rounded-xl transform -translate-y-[4%]
+            shadow-2xl border-2 border-blue-800 bg-blue-400/80 dark:bg-blue-500"
             style={widthStyle}
         />
     );

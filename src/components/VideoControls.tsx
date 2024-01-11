@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 
 // Components
+import { ThemeToggle } from '@/components/Theme'
 import { ToolTipButton } from '@/components/ToolTip'
 
 // Hooks
@@ -16,13 +17,15 @@ import { getWordIndexByTime } from '@/utils/transcript'
 import { getSegmentIndex, areSegmentsEqual, isTimeInRange } from '@/utils/crops'
 
 // Icons
-import { 
+import {
     CheckCircleIcon as SaveIcon,
     XCircleIcon as CancelIcon
 } from "@heroicons/react/24/solid"
 import {
     VolumeUp,
     VolumeMute,
+    LightMode,
+    DarkMode,
     PlayCircleOutline,
     PauseCircleOutline,
     CropFree as Edit,
@@ -71,57 +74,11 @@ function EditingControls() {
                 <SaveCancelButtons />
             ) : (
                 <div className="flex space-x-3">
-                    {(resizeMode === "9:16") && <EditButton />}
                     {(resizeMode === "Edit") && <SplitButton />}
-                    {(resizeMode === "Edit") && <ExitButton />}
+                    <ThemeToggle />
                 </div>
             )}
         </>
-    )
-}
-
-function ExitButton() {
-    const { crops, setSegments, setResizeMode } = useResizer();
-
-    function handleExit() {
-        setResizeMode("9:16");
-        setSegments(crops.segments)
-    }
-
-    return (
-        <ToolTipButton
-            tooltipText="Exit"
-            buttonClass="rounded hover:bg-gray-200"
-            tooltipClass="w-10 bottom-9 bg-blue-600"
-            OnClick={handleExit}
-        >
-            <Exit
-                sx={{ fontSize: 28 }}
-                className="text-blue-600 rotate-180 hover:text-blue-700"
-            />
-        </ToolTipButton>
-    )
-}
-
-function EditButton() {
-    const { setResizeMode } = useResizer();
-
-    const handleEdit = () => {
-        setResizeMode("Edit");
-    }
-
-    return (
-        <ToolTipButton
-            tooltipText="Edit"
-            buttonClass="rounded hover:bg-gray-200 ml-3"
-            tooltipClass="w-10 bottom-9 bg-blue-600"
-            OnClick={handleEdit}
-        >
-            <Edit
-                sx={{ fontSize: 26 }}
-                className="text-blue-600 hover:text-blue-700"
-            />
-        </ToolTipButton>
     )
 }
 
@@ -157,7 +114,7 @@ function SplitButton() {
         >
             <SplitIcon
                 sx={{ fontSize: 24 }}
-                className="text-blue-600 hover:text-blue-700"
+                className="text-blue-600 hover:text-blue-700 dark:text-white/90 dark:hover:text-white/80"
             />
         </ToolTipButton>
     )
@@ -177,9 +134,15 @@ function PlayButton() {
     return (
         <button className="mr-2" onClick={handlePlay}>
             {paused ? (
-                <PlayCircleOutline sx={{ fontSize: 28 }} className="text-blue-600" />
+                <PlayCircleOutline
+                    sx={{ fontSize: 28 }}
+                    className="text-blue-600 dark:text-white/90"
+                />
             ) : (
-                <PauseCircleOutline sx={{ fontSize: 28 }} className="text-blue-600" />
+                <PauseCircleOutline
+                    sx={{ fontSize: 28 }}
+                    className="text-blue-600 dark:text-white/90"
+                />
             )}
         </button>
     )
@@ -199,9 +162,15 @@ function VolumeButton() {
     return (
         <button onClick={handleMute}>
             {muted ? (
-                <VolumeMute sx={{ fontSize: 28 }} className="text-blue-600" />
+                <VolumeMute
+                    sx={{ fontSize: 28 }}
+                    className="text-blue-600 dark:text-white/90"
+                />
             ) : (
-                <VolumeUp sx={{ fontSize: 28 }} className="text-blue-600" />
+                <VolumeUp
+                    sx={{ fontSize: 28 }}
+                    className="text-blue-600 dark:text-white/90"
+                />
             )}
         </button>
     )
@@ -281,10 +250,16 @@ function SaveCancelButtons() {
     return (
         <div className="space-x-1.5 -mb-2">
             <button onClick={handleSave}>
-                <SaveIcon className="h-7 w-7 text-blue-600 hover:text-blue-800" />
+                <SaveIcon 
+                    className="h-7 w-7 text-blue-600 hover:text-blue-800
+                    dark:text-white/90 dark:hover:text-white/80" 
+                />
             </button>
             <button onClick={handleCancel}>
-                <CancelIcon className="h-7 w-7 text-blue-600 hover:text-blue-800" />
+                <CancelIcon
+                    className="h-7 w-7 text-blue-600 hover:text-blue-800
+                    dark:text-white/90 dark:hover:text-white/80"
+                />
             </button>
         </div>
     )

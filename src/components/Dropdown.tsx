@@ -44,7 +44,8 @@ function ListboxButton({ selected }: { selected: Interval }) {
     return (
         <Listbox.Button
             className="relative w-full cursor-default rounded-md border shadow-sm py-2 
-            pl-3 pr-10 border-gray-300 bg-white text-left sm:text-sm focus:ring-1
+            pl-3 pr-10 border-gray-300 dark:border-white/20 bg-white
+            dark:bg-zinc-900 text-left sm:text-sm focus:ring-1
             focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
         >
             <span className="block truncate">
@@ -74,8 +75,8 @@ function ListboxContainer({ open, children }: { open: boolean, children: ReactNo
         >
             <Listbox.Options
                 className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md
-                bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5
-                focus:outline-none sm:text-sm"
+                bg-white dark:bg-zinc-900 py-1 text-base shadow-lg ring-1
+                ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             >
                 {children}
             </Listbox.Options>
@@ -94,7 +95,7 @@ function ListboxOptions({ options }: { options: Interval[] }) {
                         classNames(
                             active
                                 ? 'text-white bg-indigo-600'
-                                : 'text-gray-900',
+                                : 'text-gray-900 dark:text-white',
                             'relative cursor-default select-none py-2 pl-8 pr-4'
                         )
                     }

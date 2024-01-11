@@ -10,3 +10,30 @@
     display: none; /* Chrome, Safari, Edge */
 }
 
+.range_left::-webkit-slider-thumb {
+    appearance: none;
+    pointer-events: all;
+    width: 5px;
+    height: 40px;
+    top: 10%;
+    transform: translateY(-5%) translateX(-50%);
+    /* border-radius: 50%; */
+    /* opacity: 1; */
+    background: pink;
+    cursor: ew-resize;
+    z-index: 50;
+}
+
+.range_right::-webkit-slider-thumb {
+    appearance: none;
+    pointer-events: all;
+    width: 5px;
+    height: 40px;
+    top: 10%;
+    transform: translateY(-5%) translateX(50%);
+    /* border-radius: 50%; */
+    /* opacity: 1; */
+    background: pink;
+    cursor: ew-resize;
+    z-index: 50;
+}

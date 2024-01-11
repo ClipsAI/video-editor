@@ -15,7 +15,10 @@ export function Header({ setInterval }: { setInterval: SetState<Interval> }) {
     const { clip } = useVideo();
 
     return (
-        <div className="p-4 sm:py-3 sm:px-6 border-b border-gray-300">
+        <div 
+            className="p-4 sm:py-3 sm:px-6 border-b
+            border-gray-300 dark:border-white/20"
+        >
             <span className="flex flex-row justify-between items-center">
                 <div className='w-36'>
                     <IntervalDropdown setInterval={setInterval} />

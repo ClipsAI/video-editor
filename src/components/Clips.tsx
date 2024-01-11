@@ -3,7 +3,7 @@
 // Components
 import { Search } from '@/components/Search'
 import { VideoPlayer } from '@/components/VideoPlayer'
-import { OptionsMenu, Options } from '@/components/Options'
+import { OptionsMenu, Option } from '@/components/Options'
 import { RenameModal, DeleteModal } from '@/components/Modal'
 import { ResizeToggle, Segments } from '@/components/Resize'
 
@@ -60,7 +60,7 @@ function Clips({ query, interval }: { query: string, interval: Interval }) {
     return (
         <div className="flex flex-col">
             <div
-                className="basis-0 grow border border-gray-300
+                className="basis-0 grow border border-gray-300 dark:border-white/20
                 rounded-xl overflow-scroll scrollbar-hide"
             >
                 <ul className="w-full p-4 mx-auto space-y-3">
@@ -129,9 +129,12 @@ function ClipCard({ clip, selected }: { clip: Clip, selected: boolean }) {
             key={clip.id}
             onClick={handlePlay}
             className={classNames(
-                selected ? "bg-blue-600 text-white" : "bg-blue-50/50",
-                "flex justify-between items-center space-x-2.5 p-3  cursor-pointer",
-                "border rounded-xl shadow-sm hover:border-1.5 hover:border-blue-600"
+                selected 
+                    ? "bg-blue-600 text-white"
+                    : "bg-blue-50/50 dark:bg-zinc-800",
+                "flex justify-between items-center space-x-2.5 p-3 cursor-pointer",
+                "border rounded-xl shadow-sm hover:border-1.5 hover:border-blue-600",
+                "dark:border-white/20"
             )}
         >
             <ClipInfo clip={clip} selected={selected} />
@@ -180,14 +183,18 @@ function ClipInfo({ clip, selected }: { clip: Clip; selected: boolean }) {
                 )}
                 <p className={classNames(
                     "truncate font-bold mb-1",
-                    selected ? 'text-white' : 'text-gray-900'
+                    selected 
+                        ? 'text-white'
+                        : 'text-gray-900 dark:text-white/90'
                 )}>
                     {clip.title}
                 </p>
             </div>
             <span className={classNames(
                 "inline",
-                selected ? 'text-sky-100' : 'text-gray-900'
+                selected 
+                ? 'text-sky-100' 
+                : 'text-gray-900 dark:text-sky-100'
             )}>
                 <span>{duration}</span>
                 {" "}<span aria-hidden="true">|</span>{" "}
@@ -211,7 +218,7 @@ function OptionsButton({
 }) {
     const { setClips } = useVideo();
 
-    const options: Options[] = [
+    const options: Option[] = [
         {
             id: 1,
             name: clip.favorited ? "Unfavorite" : "Favorite",
@@ -252,14 +259,19 @@ function OptionsButton({
             buttonIcon={
                 <div
                     className={classNames(
-                        selected ? "hover:bg-blue-700" : "hover:bg-blue-100",
-                        "p-0.5 rounded-full focus:outline-none"
+                        selected
+                            ? "hover:bg-blue-700"
+                            : "hover:bg-blue-100 dark:hover:bg-white/10",
+                            "p-0.5 rounded-full focus:outline-none"
                     )}
                 >
                     <EllipsisVerticalIcon
                         aria-hidden="true"
                         className={classNames(
-                            selected ? "text-white" : "text-gray-900", "h-5 w-5"
+                            selected 
+                            ? "text-white" 
+                            : "text-gray-900 dark:text-white/90", 
+                            "h-5 w-5"
                         )}
                     />
                 </div>
