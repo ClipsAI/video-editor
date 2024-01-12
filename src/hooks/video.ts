@@ -57,7 +57,7 @@ export function useVideo() {
         const currentTime = event.currentTarget.currentTime;
         setTime(currentTime);
 
-        if (currentTime > trimEndTime || currentTime < trimStartTime) {
+        if (currentTime < trimStartTime || currentTime > trimEndTime) {
             pause();
             videoPlayer.current.currentTime = trimStartTime;
         } else {

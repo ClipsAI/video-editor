@@ -1,5 +1,5 @@
 // React
-import { useContext, RefObject } from 'react' 
+import { useContext, RefObject } from 'react'
 
 // Context
 import { TrimmerContext } from '@/context/trimmer'
@@ -20,19 +20,19 @@ const RANGE_MAX = 100;
 export const useTrimmerContext = () => useContext(TrimmerContext);
 
 export function useTrimmer() {
-     const { 
-        startTime, setStartTime, 
+    const {
+        startTime, setStartTime,
         endTime, setEndTime,
         trimming, setTrimming,
         startRange, setStartRange,
         endRange, setEndRange,
-        trimStartTime, setTrimStartTime, 
+        trimStartTime, setTrimStartTime,
         trimEndTime, setTrimEndTime,
     } = useContext(TrimmerContext);
     const { resizeMode } = useResizer();
-    const { videoPlayer, clip, setCurrentTime } = useVideo();
-    const { transcript, setCurrentWordIndex, updateCurrentWord } = useTranscript();
-   
+    const { videoPlayer, setCurrentTime } = useVideo();
+    const { updateCurrentWord } = useTranscript();
+
 
     const { updateTranscript } = useTranscript();
 
@@ -99,12 +99,12 @@ export function useTrimmer() {
         onChangeEnd,
         resetTrim,
         initTrim,
-        startTime, setStartTime, 
+        startTime, setStartTime,
         endTime, setEndTime,
         trimming, setTrimming,
         startRange, setStartRange,
         endRange, setEndRange,
-        trimStartTime, setTrimStartTime, 
+        trimStartTime, setTrimStartTime,
         trimEndTime, setTrimEndTime,
     };
 
@@ -112,43 +112,64 @@ export function useTrimmer() {
 };
 
 export function useExtendRange() {
-    const { 
+    const {
         trimStartTime,
         trimEndTime,
+        setTrimming,
         startTime, setStartTime,
         endTime, setEndTime,
         startRange, setStartRange,
         endRange, setEndRange,
     } = useTrimmer();
-    const { video, clip } = useVideo();
+    const { video } = useVideo();
+    const { resizeMode } = useResizer();
     const { updateTranscript } = useTranscript();
 
-    const DURATION_INCREMENT = 5; // Consider moving this to a constants file if used across files
+    const INCREMENT = 5;
 
     const clipDuration = computeDuration(startTime, endTime);
     const localStartTime = ((startRange / RANGE_MAX) * clipDuration);
     const localEndTime = ((endRange / RANGE_MAX) * clipDuration);
 
     const extendStart = () => {
-        const duration = Math.min(clipDuration + DURATION_INCREMENT, video.metadata.duration);
+        if (["Edit", "Editing"].includes(resizeMode) || Math.round(startTime) === 0) {
+            return;
+        }
 
-        const updatedStartTime = Math.max(startTime - DURATION_INCREMENT, 0);
+        setTrimming(true);
+
+        const duration = Math.min(
+            clipDuration + INCREMENT,
+            video.metadata.duration
+        );
+
+        const updatedStartTime = Math.max(startTime - INCREMENT, 0);
         setStartTime(updatedStartTime);
 
         updateTranscript(updatedStartTime, endTime, trimStartTime, trimEndTime);
 
-        const value = (updatedStartTime === 0) ? localStartTime + startTime : localStartTime + DURATION_INCREMENT;
+        const value = (updatedStartTime === 0)
+            ? localStartTime + startTime
+            : localStartTime + INCREMENT;
+
         const updatedStartRange = (value / duration) * RANGE_MAX;
         setStartRange(updatedStartRange);
 
-        const updatedEndRange = ((localEndTime + DURATION_INCREMENT) / duration) * RANGE_MAX;
+        const updatedEndRange = ((localEndTime + INCREMENT) / duration) * RANGE_MAX;
         setEndRange(updatedEndRange);
     }
 
     const extendEnd = () => {
-        const duration = Math.min(clipDuration + DURATION_INCREMENT, video.metadata.duration);
+        if (Math.round(endTime) === Math.round(video.metadata.duration)
+            || ["Edit", "Editing"].includes(resizeMode)) {
+            return;
+        }
 
-        const newEndTime = Math.min(endTime + DURATION_INCREMENT, video.metadata.duration);
+        setTrimming(true);
+
+        const duration = Math.min(clipDuration + INCREMENT, video.metadata.duration);
+
+        const newEndTime = Math.min(endTime + INCREMENT, video.metadata.duration);
         setEndTime(newEndTime);
 
         updateTranscript(startTime, newEndTime, trimStartTime, trimEndTime);
@@ -167,7 +188,6 @@ export function useExtendRange() {
 export function getCursorRange(
     rangeBox: RefObject<HTMLDivElement>,
     mousePosition: number,
-    RANGE_MAX: number
 ): number {
     let cursorRange = 0;
 
@@ -176,9 +196,9 @@ export function getCursorRange(
         const rangeBoxLeft = rangeBoxRect.left;
         const rangeBoxWidth = rangeBoxRect.width;
 
-        cursorRange = (((mousePosition - rangeBoxLeft) / rangeBoxWidth) * RANGE_MAX);
+        cursorRange = (((mousePosition - rangeBoxLeft) / rangeBoxWidth) * 100);
         cursorRange = Math.max(0, cursorRange);
-        cursorRange = Math.min(cursorRange, RANGE_MAX);
+        cursorRange = Math.min(cursorRange, 100);
     }
 
     return cursorRange;

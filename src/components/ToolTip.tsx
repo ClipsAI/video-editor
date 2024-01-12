@@ -17,7 +17,7 @@ export function ToolTipButton({
     buttonClass: string,
     tooltipClass: string,
     children: ReactNode,
-    OnClick: (event: MouseEvent<HTMLButtonElement>) => void,
+    OnClick: () => void,
 }) {
     return (
         <div className="relative group inline-block">

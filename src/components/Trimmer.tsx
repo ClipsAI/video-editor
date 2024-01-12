@@ -1,5 +1,10 @@
 // React
-import { useRef, useState, useCallback, ReactNode } from 'react'
+import { useRef, useState, ReactNode } from 'react'
+
+// Components
+import { ToolTipButton } from '@/components/ToolTip'
+import { SegmentTrimmer } from '@/components/SegmentTrimmer'
+import { DurationTrimmer } from '@/components/DurationTrimmer'
 
 // Hooks
 import { useResizer } from '@/hooks/resizer'
@@ -8,42 +13,48 @@ import { useTrimmer, useExtendRange, getCursorRange } from '@/hooks/trimmer'
 
 // Utilities
 import { classNames } from "@/utils/styling"
-import { convertToTime, computeDuration } from '@/utils/time'
+import { convertToTime, computeDuration, computeCursorTime } from '@/utils/time'
 
 // Icons
 import { AddCircleOutline as PlusIcon } from '@mui/icons-material'
 
-const RANGE_MAX = 100;
-const STEP = 0.0001;
 
 export function Trimmer() {
     const { resizeMode } = useResizer();
-    const canExtendRange = ['16:9', '9:16'].includes(resizeMode);
+    const view = ['16:9', '9:16'].includes(resizeMode);
 
     return (
         <div className="flex">
             <ExtendRangeButton direction="start" />
-            <DurationTrimmer />
+            {view ? (
+                <DurationTrimmer />
+            ) : (
+                <SegmentTrimmer />
+            )}
             <ExtendRangeButton direction="end" />
         </div>
     );
 }
 
 
-function DurationTrimmer() {
-    const { resizeMode } = useResizer();
+export function TrimmerLayout({ 
+    children,
+    hoveringOverSliders,
+}: {
+    children: ReactNode,
+    hoveringOverSliders: boolean
+}) {
     const { currentTime, setCurrentTime } = useVideo();
     const { startTime, endTime, trimStartTime, trimEndTime } = useTrimmer();
 
     const rangeBox = useRef<HTMLDivElement | null>(null);
     const [visibleCursor, setVisibleCursor] = useState(false);
     const [mousePosition, setMousePosition] = useState(0)
-    const [hoveringOverSliders, setHoveringOverSliders] = useState(false);
 
-    const clipDuration = computeDuration(startTime, endTime);
-    const currentRange = ((currentTime - startTime) / clipDuration) * RANGE_MAX;
-    const cursorRange = getCursorRange(rangeBox, mousePosition, RANGE_MAX);
-    const cursorTime = visibleCursor ? ((cursorRange / RANGE_MAX) * clipDuration) + startTime : 0;
+    const duration = computeDuration(startTime, endTime);
+    const currentRange = ((currentTime - startTime) / duration) * 100;
+    const cursorRange = getCursorRange(rangeBox, mousePosition);
+    const cursorTime = computeCursorTime(visibleCursor, cursorRange, duration, startTime)
 
     const handleMouseClick = () => {
         if (cursorTime >= trimStartTime && cursorTime <= trimEndTime) {
@@ -58,12 +69,9 @@ function DurationTrimmer() {
             onPointerMove={(event) => setMousePosition(event.clientX)}
             onPointerEnter={() => setVisibleCursor(true)}
             onPointerLeave={() => setVisibleCursor(false)}
-            className={classNames(
-                "relative w-full flex justify-center mt-2 mb-0",
-                ["16:9", "9:16"].includes(resizeMode) ? "mx-1" : "mx-0"
-            )}
+            className="relative w-full flex justify-center mt-2 mb-0 mx-1"
         >
-            <div 
+            <div
                 className="flex items-start relative border
                 border-blue-300 h-11 w-full rounded-xl"
             >
@@ -75,45 +83,14 @@ function DurationTrimmer() {
                     cursorRange={cursorRange}
                     hoveringOverSliders={hoveringOverSliders}
                 />
-                <TrimInterval setHoveringOverSliders={setHoveringOverSliders} />
+                {children}
             </div>
         </div>
     );
-};
-
-
-export function TrimInterval({ 
-    setHoveringOverSliders 
-}: { 
-    setHoveringOverSliders: SetState<boolean> 
-}) {
-    const { start, end, onChangeStart, onChangeEnd } = useTrimmer();
-
-    return (
-        <>
-            <SliderBox start={start} end={end} />
-            <Slider
-                id="start-slider"
-                value={start}
-                onChange={onChangeStart}
-                onPointerEnter={() => setHoveringOverSliders(true)}
-                onPointerLeave={() => setHoveringOverSliders(false)}
-                className="range_left"
-            />
-            <Slider
-                id="end-slider"
-                value={end}
-                onChange={onChangeEnd}
-                onPointerEnter={() => setHoveringOverSliders(true)}
-                onPointerLeave={() => setHoveringOverSliders(false)}
-                className="range_right"
-            />
-        </>
-    )
 }
 
 
-export function Slider({ 
+export function Slider({
     id,
     value,
     className,
@@ -133,8 +110,8 @@ export function Slider({
             id={id}
             type="range"
             min={0}
-            max={RANGE_MAX}
-            step={STEP}
+            max={100}
+            step={0.0001}
             value={value}
             onChange={(event) => onChange(event.currentTarget.valueAsNumber)}
             onPointerEnter={onPointerEnter}
@@ -178,7 +155,7 @@ function SliderThumb({ position }: { position: "left" | "right" }) {
     );
 };
 
-export function Cursor({ 
+export function Cursor({
     visible,
     hoveringOverSliders,
     cursorTime,
@@ -226,52 +203,27 @@ export function TimeMarker({ currentRange }: { currentRange: number }) {
 }
 
 function ExtendRangeButton({ direction }: { direction: "start" | "end" }) {
-    const { setTrimming } = useTrimmer();
     const { extendStart, extendEnd } = useExtendRange();
 
-    const handleExtendRange = useCallback(() => {
-        setTrimming(true);
+    const handleExtendRange = () => {
         if (direction === "start") {
             extendStart();
         } else {
             extendEnd();
         }
-    }, [direction, extendStart, extendEnd, setTrimming]);
+    }
 
     return (
-        <TooltipButton
+        <ToolTipButton
             tooltipText="Add 5s"
-            className="mt-4"
-            onClick={handleExtendRange}
+            buttonClass="mt-4"
+            tooltipClass="w-14 top-14 bg-blue-600"
+            OnClick={handleExtendRange}
         >
             <PlusIcon
                 sx={{ fontSize: 26 }}
                 className="text-blue-600 dark:text-white/90"
             />
-        </TooltipButton>
+        </ToolTipButton>
     );
 }
-
-type TooltipButtonProps = {
-    tooltipText: string,
-    className: string,
-    children: ReactNode,
-    onClick: () => void
-};
-
-function TooltipButton({ tooltipText, children, ...buttonProps }: TooltipButtonProps) {
-    return (
-        <div className="relative group inline-block">
-            <button {...buttonProps}>
-                {children}
-            </button>
-            <span
-                className="absolute left-1/2 top-14 z-10 transform -translate-x-1/2 w-14
-                bg-blue-600 text-white text-xs rounded py-1 px-2 opacity-0
-                group-hover:opacity-100 transition-opacity pointer-events-none"
-            >
-                {tooltipText}
-            </span>
-        </div>
-    );
-};

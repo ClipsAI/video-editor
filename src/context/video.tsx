@@ -6,13 +6,14 @@ import { video as video_data } from '@/data/video'
 import { transcript } from '@/data/transcript'
 
 // React
-import { ReactNode, createContext, useState, useRef, MutableRefObject } from 'react'
+import { ReactNode, createContext, useState, useRef, MutableRefObject, useEffect } from 'react'
 
 // Utils
 import { filterClips } from '@/utils/clips'
 
 // Third-party Libraries
 import { useImmer, Updater } from 'use-immer'
+import { init } from 'next/dist/compiled/webpack/webpack'
 
 
 type VideoContextType = {
@@ -59,6 +60,12 @@ export function VideoProvider({ children }: { children: ReactNode }) {
     const [muted, setMuted] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(true);
     const [currentTime, setTime] = useState<number>(initClip.start_time);
+
+    useEffect(() => {
+        if (videoPlayer.current) {
+            videoPlayer.current.currentTime = currentTime;
+        }
+    }, []);
 
     const clipInfo = {
         videoPlayer,

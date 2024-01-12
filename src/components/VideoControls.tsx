@@ -24,12 +24,8 @@ import {
 import {
     VolumeUp,
     VolumeMute,
-    LightMode,
-    DarkMode,
     PlayCircleOutline,
     PauseCircleOutline,
-    CropFree as Edit,
-    ExitToApp as Exit,
     ContentCut as SplitIcon,
 } from "@mui/icons-material"
 
@@ -114,7 +110,8 @@ function SplitButton() {
         >
             <SplitIcon
                 sx={{ fontSize: 24 }}
-                className="text-blue-600 hover:text-blue-700 dark:text-white/90 dark:hover:text-white/80"
+                className="text-blue-600 hover:text-blue-700
+                dark:text-white/90 dark:hover:text-white/80"
             />
         </ToolTipButton>
     )
@@ -177,7 +174,7 @@ function VolumeButton() {
 }
 
 function SaveCancelButtons() {
-    const { transcript, currentWordIndex, setTranscriptState } = useTranscript();
+    const { transcript, setTranscriptState } = useTranscript();
     const { clip, setClip, setClips } = useVideo();
     const { setFrame } = useResizer();
     const { segments, setSegments, crops, setCrops, setResizeMode } = useResizer();
@@ -194,13 +191,10 @@ function SaveCancelButtons() {
         resetTrim
     } = useTrimmer();
 
-    const BUFFER = 0.25;
-
     const handleSave = () => {
-        if (!clip.id || !transcript.words.length) return;
-
         if (trimming) {
             let index = getWordIndexByTime(trimStartTime, transcript.words);
+            console.log("Trim: ", trimStartTime);
             const startWord = transcript.words[index];
 
             index = getWordIndexByTime(trimEndTime, transcript.words);
@@ -222,9 +216,15 @@ function SaveCancelButtons() {
                 const index = drafts.findIndex((draft: Clip) => draft.id === clip.id);
                 drafts[index].start_time = startWord.start_time;
                 drafts[index].end_time = endWord.end_time;
-                drafts[index].start_char = startWord.start_time;
+                drafts[index].start_char = startWord.start_char;
                 drafts[index].end_char = endWord.end_char;
             });
+            setTranscriptState(
+                startWord.start_char,
+                startWord.start_char,
+                endWord.end_char,
+                endWord.end_char
+            )
         } else {
             setResizeMode("Edit");
             setCrops((draft: Crops) => { draft.segments = segments });

@@ -33,3 +33,15 @@ export function convertToTime(
 export function computeDuration(start: number, end: number): number {
   return end - start;
 }
+
+export function computeCursorTime(
+    visible: boolean,
+    range: number,
+    duration: number,
+    startTime: number
+): number {
+    if (visible) {
+        return ((range / 100) * duration) + startTime;
+    }
+    return 0;
+}
