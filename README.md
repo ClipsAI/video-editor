@@ -1,4 +1,4 @@
-# ClipsAI UI Demo
+# ClipsAI Video Editor UI
 
 <!-- [![PyPI version](https://badge.fury.io/py/project-name.svg)](https://badge.fury.io/py/project-name) -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
